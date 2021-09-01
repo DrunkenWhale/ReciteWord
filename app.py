@@ -1,5 +1,5 @@
 from web import create_app
-from flask import logging
+
 if __name__ == '__main__':
     app = create_app(__name__)
     app.debug = False
