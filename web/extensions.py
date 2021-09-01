@@ -2,12 +2,13 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
 from flask import jsonify, request
 from flask_mail import Mail
+from flask_redis import FlaskRedis
 import jwt
-import sqlite3
+import datetime
 
 db = SQLAlchemy()
 mail = Mail()
-conn = sqlite3.connect("../data.db")
+redis = FlaskRedis()
 
 
 def make_json_response(
@@ -54,6 +55,10 @@ def token_return(mailbox):
     }
     msg = jwt.encode(payload=payload, key="SegmentTree", algorithm="HS256")
     return msg
+
+
+def logging_format(host_url: str, client_ip: str, method: str, request_form):
+    return '%12s--[%s] %7s "%s" ' % (client_ip, datetime.datetime.utcnow(), method, host_url) + str(request_form)[18:-2]
 
 
 def data_cleaning(dic: dict):
